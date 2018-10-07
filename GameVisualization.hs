@@ -98,7 +98,6 @@ put_u_board_h boards b_no row col cell = [if b_no == i then (put_board x row col
 
 put_board :: [[CellState]]-> Int-> Int -> CellState -> [[CellState]]
 -- put cell in position (row,col) in board
-put_board board row col cell = [if row == i 
-                              then (put_h x col cell)
+put_board board row col cell = [if row == i then (put_h x col cell)
                               else x | (i, x) <- indexer board]  
-put_h row_c col cell = [if x == i then cell else x | (i, x) <- indexer row_c] 
+put_h row_c col cell = [if col == i then cell else x | (i, x) <- indexer row_c] 
