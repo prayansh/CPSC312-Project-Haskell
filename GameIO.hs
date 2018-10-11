@@ -59,6 +59,8 @@ human_player (State ub actB nextP) line
             then action = (ChooseBoard (readMaybe line :: Maybe Int))
             else action = (PlaceAt (readMaybe line :: Maybe Int Int))
 
+ai_player :: Player
+ai_player = head (getValidActions ub actB)
 
 
 
