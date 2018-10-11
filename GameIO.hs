@@ -6,8 +6,9 @@ import TypeDef
 import GameVisualization
 import UltimateTicTacToe
 
-data Result = EndOfGame CellState State    -- end of game, value, starting state
-            | ContinueGame State        -- continue with new state
+-- TODO add better info for all these types and what they represent
+data Result = EndOfGame (Maybe Symbol) State     -- end of game, winning symbol, starting state
+            | ContinueGame State            -- continue with new state
          deriving (Eq, Show)
 
 type Game = Action -> State -> Result
@@ -19,7 +20,8 @@ data Action = PlaceAt Int Int
               | Invalid
          deriving (Eq, Show)
 
-data State = State UltimateBoard Int CellState
+-- | State represents the current board, and current active board, current(next) player
+data State = State UltimateBoard Int Symbol
         deriving (Eq, Show)
 
 gameFun :: Game
@@ -33,7 +35,7 @@ playerFun2 (State ub actB nextP) s = (PlaceAt 1 1)
 
 start :: IO()
 start = play gameFun (ContinueGame emptyState) playerFun
-    where emptyState = (State emptyUBoard (-1) 1)
+    where emptyState = (State emptyUBoardCell (-1) X)
 
 ---- Play functions
 play :: Game -> Result -> Player -> IO ()
@@ -41,20 +43,20 @@ play game (EndOfGame winner _st) player = do
     putStrLn ("Winner " ++ (show winner))
 
 -- Human Player playing
-play game (ContinueGame (State ub actB 1)) player = do
-    -- printBoard
+play game (ContinueGame (State ub actB X)) player = do
+    draw_ultimate_board ub actB -- printBoard
     if actB == (-1)
         then do putStrLn "Choose board"
         else do putStrLn "Choose coordinates with this format (1,1)"
     line <- getLine
-    let action = player (State ub actB 1) line
-    play game (game action (State ub actB 1)) player
+    let action = player (State ub actB X) line
+    play game (game action (State ub actB X)) player
 
 -- AI Player playing
-play game (ContinueGame (State ub actB 2)) player = do
-    let action = player (State ub actB 2) ""
+play game (ContinueGame (State ub actB O)) player = do
+    let action = player (State ub actB O) ""
     -- Add computer has played this
-    play game (game action (State ub actB 2)) player
+    play game (game action (State ub actB O)) player
 
 ---- Player Implementations
 -- Human Player implementation

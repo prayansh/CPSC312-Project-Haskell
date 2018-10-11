@@ -21,8 +21,8 @@ get_ub_row_drawing [x,y,z] [a,b,c] ai = [(\i -> (
                                             (get_board_drawing y (ai==1) b (board_winner y))!!i ++" "++
                                             (get_board_drawing z (ai==2) c (board_winner z))!!i)) i | i <- [0..9]]
 
-get_board_drawing :: Board -> Bool -> Char -> CellState -> [DrawingLine]
-get_board_drawing [r1,r2,r3] act name 0 = [
+get_board_drawing :: Board -> Bool -> Char -> Cell -> [DrawingLine]
+get_board_drawing [r1,r2,r3] act name Nothing = [
     (border act),                        -- 0  .....................
     (labels act name),                   -- 1  : [A] 1   2   3     :
     (separator act),                     -- 2  :   |---|---|---|   :
@@ -40,7 +40,7 @@ get_board_drawing _ act name winner = [
     (separator act),                     -- 2  :   |---|---|---|   :
     (won_row act ' ' ),                  -- 3  :   |           |   :      
     (empty_separator act),               -- 4  :   |           |   :
-    (won_row act (to_char winner) ),     -- 5  :   |     x     |   :
+    (won_row act (cellToChar winner) ),  -- 5  :   |     x     |   :
     (empty_separator act),               -- 6  :   |           |   :
     (won_row act ' ' ),                  -- 7  :   |           |   :
     (separator act),                     -- 8  :   |---|---|---|   :
@@ -48,21 +48,17 @@ get_board_drawing _ act name winner = [
 
 -- Helpers -------------- --------------------------------------------------------------
 
-row_chars :: [CellState] -> [Char]
-row_chars r = [to_char x | x <- r]
+row_chars :: [Cell] -> [Char]
+row_chars r = [cellToChar x | x <- r]
 
-to_char :: CellState -> Char
-to_char 0 = ' '
-to_char 1 = 'x'
-to_char 2 = 'o'
 
-board_winner:: Board -> CellState
+board_winner:: Board -> Cell
 board_winner [[a,b,c],
               [d,e,f],
-              [h,i,j]] = maximum cWinners -- assumes there will be one winner only 
+              [h,i,j]] = head cWinners -- assumes there will be one winner only
               where 
                 combinations = [[a,b,c],[d,e,f],[h,i,j],[a,d,h],[b,e,i],[c,f,j],[a,e,j],[c,e,h]]
-                cWinners = map (\c -> if (all (==head c) c) then a else 0) combinations
+                cWinners = map (\c -> if (all (==head c) c) then a else Nothing) combinations
 
 
 -- DrawingLine Generators --------------------------------------------------------------
@@ -104,8 +100,6 @@ draw d = do
 
 ----------------------------------------------------------------------------------------
 
-test = get_ultimate_board_drawing testUBoard 5
+test = get_ultimate_board_drawing (uBoardToCell testUBoard) 5
 
-test2 = get_ultimate_board_drawing testUBoard 5
-
-
+test2 = get_ultimate_board_drawing (uBoardToCell testUBoard) 5
