@@ -77,4 +77,26 @@ ai_player :: Player
 ai_player (State ub actB nextP) _ = head (get_valid_actions ub actB)
 
 get_valid_actions :: UltimateBoard -> Int -> [Action]
-get_valid_actions _ _ = [(ChooseBoard 4)]
+get_valid_actions ub (-1) = [(ChooseBoard i) | (i,available) <- (zip [0..8] [(==0) x | x <- (foldr (++) [] (uboard_winners ub))]), available]
+get_valid_actions ub actB =  [(PlaceAt r c) | (r,c) <- (foldr (++) [] valid_rows)]
+    where 
+        board = (ub!!(div actB 3))!!(mod actB 3)
+        valid_rows = [valid_cells (r,ri) | (r,ri) <- (zip board [0..2])]
+        valid_cells (r,ri) = [(ri,ci) | (c,ci) <- (zip r [0..2]), (c==0)]
+
+uboard_winners :: UltimateBoard -> [[CellState]]
+uboard_winners ub = [row_winners r | r <- ub]
+    where row_winners row = [board_winner b | b <- row]
+
+
+
+
+
+
+
+
+
+
+
+
+
