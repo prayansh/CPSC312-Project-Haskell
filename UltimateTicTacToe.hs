@@ -1,8 +1,6 @@
 module UltimateTicTacToe where
 
-type CellState = Integer
-type Board = [[CellState]]
-type UltimateBoard = [[Board]]
+import TypeDef
 
 -- put cell in position (row,col) at b_no in u_board
 put_u_board :: UltimateBoard -> Int -> Int -> Int -> CellState -> UltimateBoard
@@ -18,15 +16,11 @@ put_u_board_h boards b_no row col cell = [if b_no == i
 
 -- put cell in position (row,col) in board
 put_board :: Board -> Int -> Int -> CellState -> Board
-put_board board row col cell = [if row == i
-                                then (put_h x col cell)
-                                else x | (i, x) <- indexer board]
+put_board board row col cell = [if row == i then (put_h x col cell) else x | (i, x) <- indexer board]
 
 -- replaces the cell in row_c at col with cell value
-put_h :: [CellState] -> Int -> CellState
-put_h row_c col cell = [if col == i
-                        then cell
-                        else x
+put_h :: [CellState] -> Int -> CellState -> [CellState]
+put_h row_c col cell = [if col == i then cell else x
                         | (i, x) <- indexer row_c]
 
 -- function to make small board have all 1's or 2's depending on who won
@@ -75,41 +69,3 @@ indexer lst = zip [0..] lst
 split3 :: [a] -> [[a]]
 split3 [] = []
 split3 (x:y:z:lst) = [x,y,z]:(split3 lst)
-
-
-----------------------------------------------
-
-emptyUBoard = [
-       [ [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]] ],
-       [ [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]] ],
-       [ [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]] ]
-    ]
-
-testUBoard = [
-       [ [[1,0,2],[1,0,2],[0,0,0]], [[0,0,2],[0,0,0],[0,0,0]], [[0,0,1],[0,0,0],[0,1,0]] ],
-       [ [[0,0,0],[0,0,0],[0,0,0]], [[1,0,0],[0,2,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,2]] ],
-       [ [[0,0,1],[0,0,0],[0,0,0]], [[0,0,1],[0,0,2],[0,0,0]], [[0,0,0],[0,2,0],[0,0,0]] ]
-    ]
-
-testUBoard2 = [
-       [ [[1,0,2],[1,0,2],[0,0,0]], [[0,0,2],[0,0,0],[0,0,0]], [[0,0,1],[0,0,0],[0,1,0]] ],
-       [ [[0,0,0],[0,0,0],[0,0,0]], [[1,0,0],[0,2,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,2]] ],
-       [ [[0,0,1],[0,0,0],[0,0,0]], [[0,0,1],[0,0,2],[0,0,0]], [[0,0,0],[0,2,0],[0,0,0]] ]
-    ]
-
-testUBoardWinX = [
-       [ [[1,1,1],[1,1,1],[1,1,1]], [[0,0,2],[0,0,0],[0,0,0]], [[0,0,1],[0,0,0],[0,1,0]] ],
-       [ [[0,0,0],[0,0,0],[0,0,0]], [[1,1,1],[1,1,1],[1,1,1]], [[0,0,0],[0,0,0],[0,0,2]] ],
-       [ [[0,0,1],[0,0,0],[0,0,0]], [[0,0,1],[0,0,2],[0,0,0]], [[1,1,1],[1,1,1],[1,1,1]] ]
-    ]
-
-testUBoardWinO = [
-       [ [[1,0,2],[1,0,2],[0,0,0]], [[2,2,2],[2,2,2],[2,2,2]], [[0,0,1],[0,0,0],[0,1,0]] ],
-       [ [[0,0,0],[0,0,0],[0,0,0]], [[2,2,2],[2,2,2],[2,2,2]], [[0,0,0],[0,0,0],[0,0,2]] ],
-       [ [[0,0,1],[0,0,0],[0,0,0]], [[2,2,2],[2,2,2],[2,2,2]], [[0,0,0],[0,2,0],[0,0,0]] ]
-    ]
-
-board1 = [[0,0,0],[0,0,0],[0,0,0]]
-board2 = [[0,1,0],[0,1,0],[0,1,0]]
-board3 = [[1,1,1],[0,0,0],[0,0,0]]
-board4 = [[1,0,0],[0,1,0],[0,0,1]]
