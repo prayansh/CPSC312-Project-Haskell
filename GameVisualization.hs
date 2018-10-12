@@ -14,7 +14,7 @@ get_ultimate_board_drawing [r1,r2,r3] ai = Drawing(
                            (get_ub_row_drawing r1 "ABC" ai)++
                            (get_ub_row_drawing r2 "DEF" (ai-3))++
                            (get_ub_row_drawing r3 "GHI" (ai-6)))
-
+-- TODO violates architecture (tries to compute won rows)
 get_ub_row_drawing :: [Board] -> [Char] -> Int -> [DrawingLine]
 get_ub_row_drawing [x,y,z] [a,b,c] ai = [(\i -> (
                                             (get_board_drawing x (ai==0) a (board_winner x))!!i ++" "++

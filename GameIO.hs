@@ -69,10 +69,16 @@ human_player (State ub actB nextP) line
 
 -- convert user input to Action
 gen_action :: Int -> String -> Action
-gen_action (-1) input = (ChooseBoard (fromJust (readMaybe input :: Maybe Int)))
-gen_action _ input = (PlaceAt row col)
+gen_action (-1) input
+        | boardNo == Nothing = Invalid
+        | otherwise = ChooseBoard (fromJust boardNo)
+    where boardNo = (readMaybe input :: Maybe Int)
+gen_action _ input
+    | rowCol == Nothing = Invalid
+    | otherwise = PlaceAt (fst (fromJust rowCol)) (snd (fromJust rowCol))
     where
-        (row, col) = fromJust(readMaybe input :: Maybe (Int, Int))
+        rowCol = (readMaybe input :: Maybe (Int, Int))
+
 
 -- Super simple AI player
 ai_player :: Player
