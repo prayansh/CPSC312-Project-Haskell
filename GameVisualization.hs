@@ -95,10 +95,5 @@ draw d = do
     -- putStr "\ESC[2J" -- clears terminal
     putStrLn (show d)
 
-----------------------------------------------------------------------------------------
-
-test = get_ultimate_board_drawing testUBoardWinX 5 board1
-
-test2 = get_ultimate_board_drawing testUBoard 5 board1
 
 
