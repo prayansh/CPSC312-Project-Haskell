@@ -1,6 +1,7 @@
 module GameVisualization where
 
 import TypeDef
+import GameHelper
 
 type DrawingLine = String
 data Drawing = Drawing [DrawingLine]
@@ -56,13 +57,6 @@ to_char 0 = ' '
 to_char 1 = 'x'
 to_char 2 = 'o'
 
-board_winner:: Board -> CellState
-board_winner [[a,b,c],
-              [d,e,f],
-              [h,i,j]] = maximum cWinners -- assumes there will be one winner only 
-              where 
-                combinations = [[a,b,c],[d,e,f],[h,i,j],[a,d,h],[b,e,i],[c,f,j],[a,e,j],[c,e,h]]
-                cWinners = map (\c -> if (all (==head c) c) then a else 0) combinations
 
 
 -- DrawingLine Generators --------------------------------------------------------------
@@ -99,7 +93,7 @@ draw_ultimate_board ub ai = draw (get_ultimate_board_drawing ub ai)
 
 draw :: Drawing -> IO ()
 draw d = do 
-    putStr "\ESC[2J" -- clears terminal
+    -- putStr "\ESC[2J" -- clears terminal
     putStrLn (show d)
 
 ----------------------------------------------------------------------------------------
