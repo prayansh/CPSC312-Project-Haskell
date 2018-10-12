@@ -1,7 +1,6 @@
 module GameVisualization where
 
 import TypeDef
-import GameHelper
 
 type DrawingLine = String
 data Drawing = Drawing [DrawingLine]
@@ -10,17 +9,17 @@ instance Show Drawing where
 
 -- Drawing Generators-------------------------------------------------------------------
 
-get_ultimate_board_drawing :: UltimateBoard -> Int -> Drawing 
-get_ultimate_board_drawing [r1,r2,r3] ai = Drawing(
-                           (get_ub_row_drawing r1 "ABC" ai)++
-                           (get_ub_row_drawing r2 "DEF" (ai-3))++
-                           (get_ub_row_drawing r3 "GHI" (ai-6)))
+get_ultimate_board_drawing :: UltimateBoard -> Int -> [[CellState]] -> Drawing 
+get_ultimate_board_drawing [r1,r2,r3] actB [bws1,bws2,bws3] = Drawing(
+                           (get_ub_row_drawing r1 "ABC" actB bws1)++
+                           (get_ub_row_drawing r2 "DEF" (actB-3) bws2)++
+                           (get_ub_row_drawing r3 "GHI" (actB-6)) bws3)
 
-get_ub_row_drawing :: [Board] -> [Char] -> Int -> [DrawingLine]
-get_ub_row_drawing [x,y,z] [a,b,c] ai = [(\i -> (
-                                            (get_board_drawing x (ai==0) a (board_winner x))!!i ++" "++
-                                            (get_board_drawing y (ai==1) b (board_winner y))!!i ++" "++
-                                            (get_board_drawing z (ai==2) c (board_winner z))!!i)) i | i <- [0..9]]
+get_ub_row_drawing :: [Board] -> [Char] -> Int -> [CellState] -> [DrawingLine]
+get_ub_row_drawing [x,y,z] [a,b,c] ai [bw1,bw2,bw3] = [(\i -> (
+                                            (get_board_drawing x (ai==0) a bw1)!!i ++" "++
+                                            (get_board_drawing y (ai==1) b bw2)!!i ++" "++
+                                            (get_board_drawing z (ai==2) c bw3)!!i)) i | i <- [0..9]]
 
 get_board_drawing :: Board -> Bool -> Char -> CellState -> [DrawingLine]
 get_board_drawing [r1,r2,r3] act name 0 = [
@@ -88,8 +87,8 @@ add_vertical_border act str = if act then ":"++str++":" else " "++str++" "
 
 ----------------------------------------------------------------------------------------
 
-draw_ultimate_board :: UltimateBoard -> Int -> IO ()
-draw_ultimate_board ub ai = draw (get_ultimate_board_drawing ub ai)
+draw_ultimate_board :: UltimateBoard -> Int -> [[CellState]] -> IO ()
+draw_ultimate_board ub ai bws = draw (get_ultimate_board_drawing ub ai bws)
 
 draw :: Drawing -> IO ()
 draw d = do 
@@ -98,8 +97,8 @@ draw d = do
 
 ----------------------------------------------------------------------------------------
 
-test = get_ultimate_board_drawing testUBoard 5
+test = get_ultimate_board_drawing testUBoardWinX 5 board1
 
-test2 = get_ultimate_board_drawing testUBoard 5
+test2 = get_ultimate_board_drawing testUBoard 5 board1
 
 

@@ -50,12 +50,12 @@ start = play ultimateTicTacToe (ContinueGame emptyState) [human_player, ai_playe
 ---- Play functions
 play :: Game -> Result -> [Player] -> IO ()
 play _ (EndOfGame winner (State ub actB _)) _ = do
-    draw_ultimate_board ub (-1)
+    draw_ultimate_board ub (-1) (uboard_winners ub)
     putStrLn ("Winner " ++ (show winner))
 
 -- Human Player playing
 play game (ContinueGame (State ub actB 1)) [p1,p2] = do
-    draw_ultimate_board ub actB
+    draw_ultimate_board ub actB (uboard_winners ub)
     if actB == (-1)
         then do putStrLn "Choose board to play next. Example: A"
         else do putStrLn ("Choose a coordinate (row,column) in board ["++[(to_board_name actB)]++"] for where to place x. Example: (1,2)")
@@ -66,7 +66,7 @@ play game (ContinueGame (State ub actB 1)) [p1,p2] = do
 
 -- AI Player playing
 play game (ContinueGame (State ub actB 2)) [p1,p2] = do
-    draw_ultimate_board ub actB
+    draw_ultimate_board ub actB (uboard_winners ub)
     putStrLn "Press enter for the AI to place o"
     getLine
     let action = p2 (State ub actB 2) ""
