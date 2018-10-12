@@ -6,20 +6,26 @@ type Cell = Maybe Symbol -- Nothing for blank
 type Board = [[Cell]]
 type UltimateBoard = [[Board]]
 
-data Result = EndOfGame CellState State    -- end of game, value, starting state
-            | ContinueGame State        -- continue with new state
+-- | Result is either EndOfGame with winning symbol
+-- |           or ContinueGame with new state
+data Result = EndOfGame (Maybe Symbol) State     -- end of game, winning symbol, starting state
+            | ContinueGame State            -- continue with new state
          deriving (Eq, Show)
 
 type Game = Action -> State -> Result
 
 type Player = State -> String -> Action
 
+-- | Action is either PlaceAt with row, col
+-- |               or ChooseBoard with index [0..8]
+-- |               or Invalid
 data Action = PlaceAt Int Int
               | ChooseBoard Int
               | Invalid
          deriving (Eq, Show)
 
-data State = State UltimateBoard Int CellState
+-- | State represents the current board, and current active board, current(next) player
+data State = State UltimateBoard Int Symbol
         deriving (Eq, Show)
 
 ------------------------------------------------------------------------------------------
@@ -91,6 +97,30 @@ testUBoardWinO = [
        [ [[1,0,2],[1,0,2],[0,0,0]], [[2,2,2],[2,2,2],[2,2,2]], [[0,0,1],[0,0,0],[0,1,0]] ],
        [ [[0,0,0],[0,0,0],[0,0,0]], [[2,2,2],[2,2,2],[2,2,2]], [[0,0,0],[0,0,0],[0,0,2]] ],
        [ [[0,0,1],[0,0,0],[0,0,0]], [[2,2,2],[2,2,2],[2,2,2]], [[0,0,0],[0,2,0],[0,0,0]] ]
+    ]
+
+tBoardAlmostX = [
+       [ [[1,0,2],[1,0,2],[0,0,0]], [[0,0,2],[0,0,0],[0,0,0]], [[0,0,1],[0,0,0],[0,1,0]] ],
+       [ [[0,0,0],[0,0,0],[0,0,0]], [[1,0,0],[0,2,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,2]] ],
+       [ [[0,0,1],[0,0,0],[0,0,0]], [[0,0,1],[0,0,2],[0,0,0]], [[0,0,0],[0,2,0],[0,0,0]] ]
+    ]
+
+tBoardAlmostO = [
+       [ [[1,1,2],[1,2,2],[0,1,0]], [[0,0,2],[0,0,0],[0,0,0]], [[0,0,1],[0,0,0],[0,1,0]] ],
+       [ [[0,0,0],[0,0,0],[0,0,0]], [[1,0,0],[0,2,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,2]] ],
+       [ [[0,0,1],[0,0,0],[0,0,0]], [[0,0,1],[0,0,2],[0,0,0]], [[0,0,0],[0,2,0],[0,0,0]] ]
+    ]
+
+tUBoardAlmostX = [
+            [ [[1,0,2],[1,0,2],[1,0,0]], [[2,1,2],[0,1,0],[0,1,0]], [[0,2,1],[2,0,1],[2,1,0]] ],
+            [ [[0,0,0],[0,0,0],[0,0,0]], [[1,0,0],[0,2,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,2]] ],
+            [ [[0,0,1],[0,0,0],[0,0,0]], [[0,0,1],[0,0,2],[0,0,0]], [[0,0,0],[0,2,0],[0,0,0]] ]
+         ]
+
+tUBoardAlmostO = [
+       [ [[1,0,2],[1,0,2],[2,0,2]], [[2,1,2],[2,0,0],[2,1,0]], [[0,2,1],[2,0,1],[2,1,0]] ],
+       [ [[0,0,0],[0,0,0],[0,0,0]], [[1,0,0],[0,2,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,2]] ],
+       [ [[0,0,1],[0,0,0],[0,0,0]], [[0,0,1],[0,0,2],[0,0,0]], [[0,0,0],[0,2,0],[0,0,0]] ]
     ]
 
 emptyUBoardCell = (uBoardToCell emptyUBoard)

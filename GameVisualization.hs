@@ -9,13 +9,13 @@ instance Show Drawing where
 
 -- Drawing Generators-------------------------------------------------------------------
 
-get_ultimate_board_drawing :: UltimateBoard -> Int -> [[CellState]] -> Drawing
+get_ultimate_board_drawing :: UltimateBoard -> Int -> [[Cell]] -> Drawing
 get_ultimate_board_drawing [r1,r2,r3] actB [bws1,bws2,bws3] = Drawing(
                            (get_ub_row_drawing r1 "ABC" actB bws1)++
                            (get_ub_row_drawing r2 "DEF" (actB-3) bws2)++
                            (get_ub_row_drawing r3 "GHI" (actB-6)) bws3)
 
-get_ub_row_drawing :: [Board] -> [Char] -> Int -> [CellState] -> [DrawingLine]
+get_ub_row_drawing :: [Board] -> [Char] -> Int -> [Cell] -> [DrawingLine]
 get_ub_row_drawing [x,y,z] [a,b,c] ai [bw1,bw2,bw3] = [(\i -> (
                                             (get_board_drawing x (ai==0) a bw1)!!i ++" "++
                                             (get_board_drawing y (ai==1) b bw2)!!i ++" "++
@@ -51,9 +51,6 @@ get_board_drawing _ act name winner = [
 row_chars :: [Cell] -> [Char]
 row_chars r = [cellToChar x | x <- r]
 
-
-
-
 -- DrawingLine Generators --------------------------------------------------------------
 
 border :: Bool -> DrawingLine
@@ -83,7 +80,7 @@ add_vertical_border act str = if act then ":"++str++":" else " "++str++" "
 
 ----------------------------------------------------------------------------------------
 
-draw_ultimate_board :: UltimateBoard -> Int -> [[CellState]] -> IO ()
+draw_ultimate_board :: UltimateBoard -> Int -> [[Cell]] -> IO ()
 draw_ultimate_board ub ai bws = draw (get_ultimate_board_drawing ub ai bws)
 
 draw :: Drawing -> IO ()
