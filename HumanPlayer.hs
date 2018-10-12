@@ -13,22 +13,14 @@ human_player (State ub actB nextP) line
     | elem action (get_valid_actions ub actB) = action
     | otherwise = Invalid
     where
-        action = gui_parse_action actB line
+        action = gen_action actB line
 
-
-gui_parse_action (-1) [bs] = (ChooseBoard b)
+-- convert user input to Action
+gen_action :: Int -> String -> Action
+gen_action (-1) [bs] = (ChooseBoard b)
     where b = ((digitToInt bs) - 10)
-gui_parse_action _ ['(',rs,',',cs,')'] = (PlaceAt r c)
-    where 
-        r = (digitToInt rs)
-        c = (digitToInt cs)
-gui_parse_action _ _ = Invalid
-
--- -- convert user input to Action
--- gen_action :: Int -> String -> Action
--- gen_action (-1) input = (ChooseBoard (fromJust (readMaybe input :: Maybe Int)))
-
-
--- gen_action _ input = (PlaceAt row col)
---     where
---         (row, col) = fromJust(readMaybe input :: Maybe (Int, Int))
+gen_action _ input
+    | rowCol == Nothing = Invalid
+    | otherwise = PlaceAt (fst (fromJust rowCol)) (snd (fromJust rowCol))
+    where
+        rowCol = (readMaybe input :: Maybe (Int, Int))
