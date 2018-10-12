@@ -2,87 +2,90 @@ module GameIO where
 
 import Text.Read (readMaybe)
 import Data.Maybe
+import Data.Char
 import TypeDef
 import GameVisualization
+import HumanPlayer
+import AIPlayer
 import UltimateTicTacToe
 
--- TODO add better info for all these types and what they represent
-data Result = EndOfGame (Maybe Symbol) State     -- end of game, winning symbol, starting state
-            | ContinueGame State            -- continue with new state
-         deriving (Eq, Show)
 
-type Game = Action -> State -> Result
-
-type Player = State -> String -> Action
-
-data Action = PlaceAt Int Int 
-              | ChooseBoard Int
-              | Invalid
-         deriving (Eq, Show)
-
--- | State represents the current board, and current active board, current(next) player
-data State = State UltimateBoard Int Symbol
-        deriving (Eq, Show)
 
 gameFun :: Game
 gameFun act (State ub actB nextP) = (ContinueGame (State ub actB nextP))
 
-playerFun :: Player
-playerFun (State ub actB nextP) s = (ChooseBoard actB)
+ultimateTicTacToe :: Game
+ultimateTicTacToe Invalid s = (ContinueGame s)
+ultimateTicTacToe (ChooseBoard b) (State ub actB nextP) = (ContinueGame (State ub b nextP))
+ultimateTicTacToe (PlaceAt row col) (State ub actB p)
+    | nextUBoardWinner==0  = (ContinueGame (State nextUBoard nextActiveBoard (next p)) )
+    | otherwise = (EndOfGame nextUBoardWinner (State nextUBoard (-1) p))
+    where
+        nextUBoard = (put (State ub actB p) row col)
+        nextUBoardWinner = board_winner (uboard_winners nextUBoard)
+        nextActiveBoard = if (elem (to_board_index row col) (get_valid_boards nextUBoard))
+            then (to_board_index row col)
+            else (-1)
 
-playerFun2 :: Player
-playerFun2 (State ub actB nextP) s = (PlaceAt 1 1)
+
+put :: State -> Int -> Int -> UltimateBoard
+put (State ub actB nextP) row col = put_u_board ub actB row col nextP
+
+to_board_index :: Int -> Int -> Int
+to_board_index row col = (3 * row) + col
+
+to_board_name :: Int -> Char
+to_board_name bi = toUpper (intToDigit (bi+10))
+
+next :: CellState -> CellState
+next 1 = 2
+next 2 = 1
+
 
 start :: IO()
-start = play gameFun (ContinueGame emptyState) playerFun
-    where emptyState = (State emptyUBoardCell (-1) X)
+start = play ultimateTicTacToe (ContinueGame emptyState) [human_player, ai_player]
+    where emptyState = (State emptyUBoard (-1) 1)
 
 ---- Play functions
-play :: Game -> Result -> Player -> IO ()
-play game (EndOfGame winner _st) player = do
+play :: Game -> Result -> [Player] -> IO ()
+play _ (EndOfGame winner (State ub actB _)) _ = do
+    draw_ultimate_board ub (-1) (uboard_winners ub)
     putStrLn ("Winner " ++ (show winner))
 
 -- Human Player playing
-play game (ContinueGame (State ub actB X)) player = do
-    draw_ultimate_board ub actB -- printBoard
+play game (ContinueGame (State ub actB 1)) [p1,p2] = do
+    draw_ultimate_board ub actB (uboard_winners ub)
     if actB == (-1)
-        then do putStrLn "Choose board"
-        else do putStrLn "Choose coordinates with this format (1,1)"
+        then do putStrLn "Choose board to play next. Example: A"
+        else do putStrLn ("Choose a coordinate (row,column) in board ["++[(to_board_name actB)]++"] for where to place x. Example: (1,2)")
     line <- getLine
-    let action = player (State ub actB X) line
-    play game (game action (State ub actB X)) player
+    let action = p1 (State ub actB 1) line
+    putStrLn ("You played: " ++ (show action))
+    play game (game action (State ub actB 1)) [p1,p2]
 
 -- AI Player playing
-play game (ContinueGame (State ub actB O)) player = do
-    let action = player (State ub actB O) ""
+play game (ContinueGame (State ub actB 2)) [p1,p2] = do
+    draw_ultimate_board ub actB (uboard_winners ub)
+    putStrLn "Press enter for the AI to place o"
+    getLine
+    let action = p2 (State ub actB 2) ""
     -- Add computer has played this
-    play game (game action (State ub actB O)) player
-
----- Player Implementations
--- Human Player implementation
-human_player :: Player
-human_player (State ub actB nextP) line
-    | elem action (get_valid_actions ub actB) = action
-    | otherwise = (Invalid)
-    where
-        action = gen_action actB line
-
--- convert user input to Action
-gen_action :: Int -> String -> Action
-gen_action (-1) input
-        | boardNo == Nothing = Invalid
-        | otherwise = ChooseBoard (fromJust boardNo)
-    where boardNo = (readMaybe input :: Maybe Int)
-gen_action _ input
-    | rowCol == Nothing = Invalid
-    | otherwise = PlaceAt (fst (fromJust rowCol)) (snd (fromJust rowCol))
-    where
-        rowCol = (readMaybe input :: Maybe (Int, Int))
+    putStrLn ("Computer Played: " ++ (show action))
+    play game (game action (State ub actB 2)) [p1,p2]
 
 
--- Super simple AI player
-ai_player :: Player
-ai_player (State ub actB nextP) _ = head (get_valid_actions ub actB)
 
-get_valid_actions :: UltimateBoard -> Int -> [Action]
-get_valid_actions _ _ = [(ChooseBoard 4)]
+
+
+
+
+
+
+
+
+
+
+
+
+
+

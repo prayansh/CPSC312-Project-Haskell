@@ -6,6 +6,22 @@ type Cell = Maybe Symbol -- Nothing for blank
 type Board = [[Cell]]
 type UltimateBoard = [[Board]]
 
+data Result = EndOfGame CellState State    -- end of game, value, starting state
+            | ContinueGame State        -- continue with new state
+         deriving (Eq, Show)
+
+type Game = Action -> State -> Result
+
+type Player = State -> String -> Action
+
+data Action = PlaceAt Int Int
+              | ChooseBoard Int
+              | Invalid
+         deriving (Eq, Show)
+
+data State = State UltimateBoard Int CellState
+        deriving (Eq, Show)
+
 ------------------------------------------------------------------------------------------
 -- | Converts a Symbol into the number representation
 symbolToInt :: Symbol -> Integer
