@@ -56,7 +56,7 @@ is_board_won board = not (isNothing $ get_winner_board board)
 
 -- | Function to check if uBoard is draw
 is_u_board_draw :: UltimateBoard -> Bool
-is_u_board_draw uBoard = and (map is_board_draw (concat uBoard))
+is_u_board_draw uBoard = and (map (\x -> is_board_draw x || is_board_won x) (concat uBoard))
 
 -- | Function to check if board is draw
 is_board_draw :: Board -> Bool

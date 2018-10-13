@@ -10,7 +10,7 @@ import UltimateTicTacToe
 ---- Player Implementations
 -- Human Player implementation
 human_player :: Player
-human_player (State ub actB nextP)  = do
+human_player (State ub actB nextP) _  = do
     if actB == (-1)
         then putStrLn "Choose board to play next. Example: A"
         else putStrLn ("Choose a coordinate (row,column) in board [" ++

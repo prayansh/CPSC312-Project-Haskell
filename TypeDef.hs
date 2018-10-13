@@ -14,7 +14,7 @@ data Result = EndOfGame (Maybe Symbol) State     -- end of game, winning symbol,
 
 type Game = Action -> State -> Result
 
-type Player = State -> IO Action
+type Player = State -> Bool -> IO Action
 
 -- | Action is either PlaceAt with row, col
 -- |               or ChooseBoard with index [0..8]
@@ -146,6 +146,12 @@ tUBoardAlmostDraw = [
        [ [[1,2,1],[2,2,1],[1,1,2]], [[1,2,1],[2,2,1],[0,1,2]], [[1,2,1],[2,2,1],[1,1,2]]],
        [ [[1,2,1],[2,2,1],[1,1,2]], [[1,2,1],[2,2,1],[1,1,2]], [[1,2,1],[2,2,1],[1,1,2]]],
        [ [[1,2,1],[2,2,1],[1,1,2]], [[1,2,1],[2,2,1],[1,1,2]], [[1,2,1],[2,2,1],[1,1,2]]]
+    ]
+
+tBoard = [
+       [ [[1,0,2],[0,2,0],[2,0,2]], [[2,1,2],[1,1,1],[2,0,2]], [[1,1,1],[0,0,0],[0,0,0]]],
+       [ [[2,1,2],[1,1,1],[0,0,2]], [[1,1,2],[1,1,1],[2,0,2]], [[2,0,2],[0,2,0],[2,0,2]]],
+       [ [[1,1,2],[1,2,0],[2,0,2]], [[1,1,2],[1,1,0],[2,2,2]], [[1,1,1],[0,0,0],[0,0,0]]]
     ]
 
 emptyUBoardCell = (uBoardToCell emptyUBoard)
