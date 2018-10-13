@@ -11,34 +11,25 @@ import UltimateTicTacToe
 import GameHelper
 
 ---- Game Start
-start :: IO()
-start = play ultimateTicTacToe (ContinueGame emptyState) [human_player, ai_player]
+start :: [Player] -> IO()
+start [p1,p2] = play ultimateTicTacToe (ContinueGame emptyState) [p1,p2]
     where emptyState = (State emptyUBoardCell (-1) X)
+
+start _ = do
+    putStrLn "Must specify two players"
+
+startDefault = start [human_player, simple_player]
 
 ---- Play functions
 play :: Game -> Result -> [Player] -> IO ()
+
 play _ (EndOfGame winner (State ub actB _)) _ = do
     draw_ultimate_board ub (-1) (u_board_to_board ub)
     putStrLn ("Winner " ++ (show winner))
 
--- Human Player playing
-play game (ContinueGame (State ub actB X)) [p1,p2] = do
+play game (ContinueGame (State ub actB playerSymbol)) [currentP, otherP] = do
     draw_ultimate_board ub actB (u_board_to_board ub)
-    if actB == (-1)
-        then do putStrLn "Choose board to play next. Example: A"
-        else do putStrLn ("Choose a coordinate (row,column) in board [" ++
-                            [(bNameFromInt actB)] ++ "] for where to place x. Example: (1,2)")
-    line <- getLine
-    let action = p1 (State ub actB X) line
-    putStrLn ("You: " ++ (show action))
-    play game (game action (State ub actB X)) [p1,p2]
-
--- AI Player playing
-play game (ContinueGame (State ub actB O)) [p1,p2] = do
-    draw_ultimate_board ub actB (u_board_to_board ub)
-    putStrLn "Press enter for the AI to place o"
-    getLine
-    let action = p2 (State ub actB O) ""
-    -- Add computer has played this
-    putStrLn ("Computer: " ++ (show action))
-    play game (game action (State ub actB O)) [p1,p2]
+    action <- currentP (State ub actB playerSymbol)
+    putStrLn ((show playerSymbol) ++ ": " ++ (show action))
+    let playerList = if isPlaceAt action then [otherP, currentP] else [currentP, otherP]
+    play game (game action (State ub actB playerSymbol)) playerList

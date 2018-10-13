@@ -10,11 +10,17 @@ import UltimateTicTacToe
 ---- Player Implementations
 -- Human Player implementation
 human_player :: Player
-human_player (State ub actB nextP) line
-    | elem action (get_valid_actions ub actB) = action
-    | otherwise = Invalid
-    where
-        action = gen_action actB line
+human_player (State ub actB nextP)  = do
+    if actB == (-1)
+        then putStrLn "Choose board to play next. Example: A"
+        else putStrLn ("Choose a coordinate (row,column) in board [" ++
+                            [(bNameFromInt actB)] ++ "] for where to place x. Example: (1,2)")
+    line <- getLine
+    let valid_actions = get_valid_actions ub actB
+    let action = gen_action actB line
+    if elem action valid_actions
+        then return action
+        else return Invalid
 
 -- convert user input to Action
 gen_action :: Int -> String -> Action

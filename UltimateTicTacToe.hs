@@ -46,17 +46,6 @@ put_h :: [Cell] -> Int -> Cell -> [Cell]
 put_h row_c col cell = [if col == i then cell else x
                         | (i, x) <- indexer row_c]
 
--- TODO delete
----- | function to make small board have all 1's or 2's depending on who won
---fill_win_u :: UltimateBoard -> Int -> Cell -> UltimateBoard
---fill_win_u u_board b_no val = split3 $ [ if (i == b_no)
---                                        then (fill_win b val)
---                                        else b
---                                        | (i, b) <- (indexer (concat u_board))]
---
---fill_win :: Board -> Cell -> Board
---fill_win board val = [[val,val,val]| r<-board]
-
 -- | function to check if valid move
 is_valid_move :: UltimateBoard -> Int -> Int -> Int -> Bool
 is_valid_move u_board b_no row col = ((((concat u_board)!!b_no)!!row)!!col) == Nothing

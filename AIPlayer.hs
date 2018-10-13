@@ -7,5 +7,9 @@ import TypeDef
 import UltimateTicTacToe
 
 -- Super simple AI player
-ai_player :: Player
-ai_player (State ub actB nextP) _ = head (get_valid_actions ub actB)
+simple_player :: Player
+simple_player (State ub actB nextP) = do
+    putStrLn "Press enter for the AI to place o"
+    getLine
+    let action = head (get_valid_actions ub actB)
+    return action

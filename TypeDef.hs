@@ -8,13 +8,13 @@ type UltimateBoard = [[Board]]
 
 -- | Result is either EndOfGame with winning symbol
 -- |           or ContinueGame with new state
-data Result = EndOfGame (Maybe Symbol) State     -- end of game, winning symbol, starting state
-            | ContinueGame State            -- continue with new state
+data Result = EndOfGame (Maybe Symbol) State     -- end of game, winning symbol, last state
+            | ContinueGame State                 -- continue with state
          deriving (Eq, Show)
 
 type Game = Action -> State -> Result
 
-type Player = State -> String -> Action
+type Player = State -> IO Action
 
 -- | Action is either PlaceAt with row, col
 -- |               or ChooseBoard with index [0..8]
@@ -23,6 +23,11 @@ data Action = PlaceAt Int Int
               | ChooseBoard Int
               | Invalid
          deriving (Eq)
+isPlaceAt (PlaceAt _ _) = True
+isPlaceAt _     = False
+
+isChooseBoard (ChooseBoard _) = True
+isChooseBoard  _     = False
 
 instance Show Action where
     show (PlaceAt row col) = "Place At (row: " ++ show (row+1) ++ ", col: " ++ show (col+1) ++ ")"
