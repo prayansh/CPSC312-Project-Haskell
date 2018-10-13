@@ -11,6 +11,7 @@ import UltimateTicTacToe
 import GameHelper
 
 ---- Game Start
+-- | Start the game with a list of two players and a boolean for fast-mode
 start :: [Player] -> Bool -> IO()
 start [p1,p2] True = playFast ultimateTicTacToe (ContinueGame emptyState) [p1,p2]
     where emptyState = (State emptyUBoardCell (-1) X)
@@ -21,9 +22,11 @@ start [p1,p2] _ = play ultimateTicTacToe (ContinueGame emptyState) [p1,p2]
 start _ _ = do
     putStrLn "Must specify two players"
 
+-- | Start a default game of Human vs AI
 startDefault = start [human_player, unintelligent_player] False
 
 ---- Play functions
+-- | Play the game given the current result, and a list of players
 play :: Game -> Result -> [Player] -> IO ()
 
 play _ (EndOfGame winner (State ub actB _)) _ = do
@@ -38,7 +41,7 @@ play game (ContinueGame (State ub actB playerSymbol)) [currentP, otherP] = do
     let playerList = if isPlaceAt action then [otherP, currentP] else [currentP, otherP]
     play game (game action (State ub actB playerSymbol)) playerList
 
--- | Reduce output for faster game processing (ideal for AI vs AI)
+-- | Play a game with reduced output, for faster game speed (ideal for AI vs AI)
 playFast :: Game -> Result -> [Player] -> IO ()
 
 playFast _ (EndOfGame winner (State ub actB _)) _ = do

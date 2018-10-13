@@ -12,10 +12,6 @@ data Result = EndOfGame (Maybe Symbol) State     -- end of game, winning symbol,
             | ContinueGame State                 -- continue with state
          deriving (Eq, Show)
 
-type Game = Action -> State -> Result
-
-type Player = State -> Bool -> IO Action
-
 -- | Action is either PlaceAt with row, col
 -- |               or ChooseBoard with index [0..8]
 -- |               or Invalid
@@ -37,6 +33,13 @@ instance Show Action where
 -- | State represents the current board, and current active board, current(next) player
 data State = State UltimateBoard Int Symbol
         deriving (Eq, Show)
+
+-- | Game function given an Action, and a State, returns a Result
+type Game = Action -> State -> Result
+
+-- | Player function given a State, and a fast-mode boolean, returns an Action
+type Player = State -> Bool -> IO Action
+
 
 ------------------------------------------------------------------------------------------
 -- | Converts a Symbol into the number representation

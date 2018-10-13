@@ -7,6 +7,7 @@ import TypeDef
 import UltimateTicTacToe
 
 -- Super simple AI player
+-- | Chooses first option from valid actions
 unintelligent_player :: Player
 unintelligent_player (State ub actB nextP) True = do
     let action = head (get_valid_actions ub actB)
@@ -18,6 +19,7 @@ unintelligent_player (State ub actB nextP) False = do
     return action
 
 -- Simple Player
+-- | Chooses first valid option from a list of actions
 choose_actions =  [ ChooseBoard 0, ChooseBoard 6, ChooseBoard 5,
                     ChooseBoard 2, ChooseBoard 3, ChooseBoard 4,
                     ChooseBoard 8, ChooseBoard 7, ChooseBoard 1]
@@ -43,10 +45,12 @@ get_next_best valid (x:xs)
     | otherwise = get_next_best valid xs
 get_next_best _ _ = Invalid
 
+-- | Not implemented, Chooses a random action from valid_actions list
 random_player :: Player
 random_player (State ub actB nextP) _ = do
     return Invalid
 
+-- | Not implemented, Chooses the first action from a shuffled valid_actions list
 shuffle_player :: Player
 shuffle_player (State ub actB nextP) _ = do
     return Invalid
