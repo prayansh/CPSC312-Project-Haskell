@@ -14,7 +14,7 @@ human_player (State ub actB nextP)  = do
     if actB == (-1)
         then putStrLn "Choose board to play next. Example: A"
         else putStrLn ("Choose a coordinate (row,column) in board [" ++
-                            [(bNameFromInt actB)] ++ "] for where to place x. Example: (1,2)")
+                            [(bNameFromInt actB)] ++ "] for where to place "++(show nextP)++". Example: (1,2)")
     line <- getLine
     let valid_actions = get_valid_actions ub actB
     let action = gen_action actB line

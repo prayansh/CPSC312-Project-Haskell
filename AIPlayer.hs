@@ -9,7 +9,7 @@ import UltimateTicTacToe
 -- Super simple AI player
 simple_player :: Player
 simple_player (State ub actB nextP) = do
-    putStrLn "Press enter for the AI to place o"
+    putStrLn ("Press enter for the AI to place "++(show nextP))
     getLine
     let action = head (get_valid_actions ub actB)
     return action

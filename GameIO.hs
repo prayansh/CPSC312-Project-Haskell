@@ -29,6 +29,7 @@ play _ (EndOfGame winner (State ub actB _)) _ = do
 
 play game (ContinueGame (State ub actB playerSymbol)) [currentP, otherP] = do
     draw_ultimate_board ub actB (u_board_to_board ub)
+    putStrLn ("Now playing: "++ (show playerSymbol))
     action <- currentP (State ub actB playerSymbol)
     putStrLn ((show playerSymbol) ++ ": " ++ (show action))
     let playerList = if isPlaceAt action then [otherP, currentP] else [currentP, otherP]
