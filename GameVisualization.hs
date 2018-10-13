@@ -17,9 +17,9 @@ get_ultimate_board_drawing [r1,r2,r3] actB [bws1,bws2,bws3] = Drawing(
 
 get_ub_row_drawing :: [Board] -> [Char] -> Int -> [Cell] -> [DrawingLine]
 get_ub_row_drawing [x,y,z] [a,b,c] ai [bw1,bw2,bw3] = [(\i -> (
-                                            (get_board_drawing x (ai==0) a bw1)!!i ++" "++
-                                            (get_board_drawing y (ai==1) b bw2)!!i ++" "++
-                                            (get_board_drawing z (ai==2) c bw3)!!i)) i | i <- [0..9]]
+                                        (get_board_drawing x (ai==0) a bw1)!!i ++" "++
+                                        (get_board_drawing y (ai==1) b bw2)!!i ++" "++
+                                        (get_board_drawing z (ai==2) c bw3)!!i)) i | i <- [0..9]]
 
 get_board_drawing :: Board -> Bool -> Char -> Cell -> [DrawingLine]
 get_board_drawing [r1,r2,r3] act name Nothing = [

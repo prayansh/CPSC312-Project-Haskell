@@ -4,7 +4,7 @@ import Text.Read (readMaybe)
 import Data.Maybe
 import Data.Char
 import TypeDef
-import GameHelper
+import UltimateTicTacToe
 
 -- Super simple AI player
 ai_player :: Player

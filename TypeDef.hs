@@ -22,7 +22,12 @@ type Player = State -> String -> Action
 data Action = PlaceAt Int Int
               | ChooseBoard Int
               | Invalid
-         deriving (Eq, Show)
+         deriving (Eq)
+
+instance Show Action where
+    show (PlaceAt row col) = "Place At (row: " ++ show (row+1) ++ ", col: " ++ show (col+1) ++ ")"
+    show (ChooseBoard bNo) = "Choose Board " ++ show bNo
+    show Invalid = "Invalid action"
 
 -- | State represents the current board, and current active board, current(next) player
 data State = State UltimateBoard Int Symbol
@@ -67,7 +72,10 @@ uBoardToCell ub = [[boardToCell c | c <- r]| r<-ub]
 boardToCell :: [[Integer]] -> Board
 boardToCell b = [[intToCell c | c <- r]| r<-b]
 
-
+-- | Returns the other symbol
+nextSymbol :: Symbol -> Symbol
+nextSymbol X = O
+nextSymbol O = X
 ------------------------------------------------------------------------------------------
 emptyUBoard = [
        [ [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]], [[0,0,0],[0,0,0],[0,0,0]] ],
@@ -123,6 +131,18 @@ tUBoardAlmostO = [
        [ [[0,0,1],[0,0,0],[0,0,0]], [[0,0,1],[0,0,2],[0,0,0]], [[0,0,0],[0,2,0],[0,0,0]] ]
     ]
 
+tUBoardDraw = [
+       [ board6, board6, board6],
+       [ board6, board6, board6],
+       [ board6, board6, board6]
+    ]
+
+tUBoardAlmostDraw = [
+       [ [[1,2,1],[2,2,1],[1,1,2]], [[1,2,1],[2,2,1],[0,1,2]], [[1,2,1],[2,2,1],[1,1,2]]],
+       [ [[1,2,1],[2,2,1],[1,1,2]], [[1,2,1],[2,2,1],[1,1,2]], [[1,2,1],[2,2,1],[1,1,2]]],
+       [ [[1,2,1],[2,2,1],[1,1,2]], [[1,2,1],[2,2,1],[1,1,2]], [[1,2,1],[2,2,1],[1,1,2]]]
+    ]
+
 emptyUBoardCell = (uBoardToCell emptyUBoard)
 
 board1 = [[0,0,0],[0,0,0],[0,0,0]]
@@ -130,3 +150,4 @@ board2 = [[0,1,0],[0,1,0],[0,1,0]]
 board3 = [[1,1,1],[0,0,0],[0,0,0]]
 board4 = [[1,0,0],[0,1,0],[0,0,1]]
 board5 = [[2,0,0],[0,2,0],[0,0,2]]
+board6 = [[1,2,1],[2,2,1],[1,1,2]] -- Draw
