@@ -14,9 +14,9 @@ bNameFromInt bInt = (chr (bInt + ord 'A'))
 
 -- | returns an indexed tuple for each element in the lst
 indexer :: [a] -> [(Int, a)]
-indexer lst = zip [0..] lst
+indexer lst = zip [0 ..] lst
 
 -- | convert lst to seperate at 3
 split3 :: [a] -> [[a]]
 split3 [] = []
-split3 (x:y:z:lst) = [x,y,z]:(split3 lst)
+split3 (x:y:z:lst) = [x, y, z] : (split3 lst)
