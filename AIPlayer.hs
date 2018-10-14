@@ -7,6 +7,7 @@ import Text.Read (readMaybe)
 import TypeDef
 import UltimateTicTacToe
 import qualified GuiAI as Gui
+import Minimax
 
 -- Super simple AI player
 -- | Chooses first option from valid actions
@@ -68,24 +69,29 @@ get_next_best valid (x:xs)
 get_next_best _ _ = Invalid
 
 -- | Not implemented, Chooses a random action from valid_actions list
--- random_player :: Player
--- random_player (State ub actB nextP) False = do
---   putStrLn ("Press enter for the AI to place " ++ (show nextP))
---   getLine
---   let valid_actions = (get_valid_actions ub actB)
---   index <- randomRIO (0, ((length valid_actions) - 1) :: Int)
---   let action = valid_actions !! index
---   return action
--- random_player (State ub actB nextP) _ = do
---   let valid_actions = (get_valid_actions ub actB)
---   index <- randomRIO (0, ((length valid_actions) - 1) :: Int)
---   let action = valid_actions !! index
---   return action
+random_player :: Player
+random_player (State ub actB nextP) False = do
+  putStrLn ("Press enter for the AI to place " ++ (show nextP))
+  getLine
+  let valid_actions = (get_valid_actions ub actB)
+  index <- randomRIO (0, ((length valid_actions) - 1) :: Int)
+  let action = valid_actions !! index
+  return action
+random_player (State ub actB nextP) _ = do
+  let valid_actions = (get_valid_actions ub actB)
+  index <- randomRIO (0, ((length valid_actions) - 1) :: Int)
+  let action = valid_actions !! index
+  return action
 
--- | Not implemented, Chooses the first action from a shuffled valid_actions list
-shuffle_player :: Player
-shuffle_player (State ub actB nextP) _ = do
-  return Invalid
+-- ultimate tic tac toe minimax player
+my_mm_player :: Player
+my_mm_player state True = do
+    return (mm_player ultimateTicTacToe state)
+my_mm_player (State ub actB nextP) False = do
+    putStrLn ("Press enter for the AI to place "++(show nextP))
+    getLine
+    return (mm_player ultimateTicTacToe (State ub actB nextP))
+
 
 -- Takes a non io, pure player and converts it into a io player
 create_player :: (Game -> State -> Action) -> Player
