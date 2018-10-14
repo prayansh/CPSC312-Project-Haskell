@@ -5,6 +5,7 @@ import Data.Maybe
 import Data.Char
 import TypeDef
 import UltimateTicTacToe
+import Minimax
 
 -- Super simple AI player
 -- | Chooses first option from valid actions
@@ -54,3 +55,12 @@ random_player (State ub actB nextP) _ = do
 shuffle_player :: Player
 shuffle_player (State ub actB nextP) _ = do
     return Invalid
+
+-- ultimate tic tac toe minimax player
+my_mm_player :: Player
+my_mm_player state True = do
+    return (mm_player ultimateTicTacToe state)
+my_mm_player (State ub actB nextP) False = do
+    putStrLn ("Press enter for the AI to place "++(show nextP))
+    getLine
+    return (mm_player ultimateTicTacToe (State ub actB nextP))

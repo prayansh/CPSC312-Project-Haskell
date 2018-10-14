@@ -64,8 +64,11 @@ is_board_draw board = null [c | c <- concat board, isNothing c]
 
 -- | function to get list of playable boards
 get_playable_boards :: UltimateBoard -> [Int]
-get_playable_boards ub = [i | (i,w) <- (indexer win), isNothing w]
-    where win = concat $ u_board_to_board ub
+get_playable_boards ub =
+  [ i
+  | (i, b) <- (indexer $ concat ub)
+  , (not $ is_board_won b) && (not $ is_board_draw b)
+  ]
 
 -- | function to check who won u_board
 get_winner_u_board :: UltimateBoard -> Maybe Symbol
