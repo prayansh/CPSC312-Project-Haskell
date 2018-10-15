@@ -7,6 +7,7 @@ import System.Random
 import Text.Read (readMaybe)
 import TypeDef
 import UltimateTicTacToe
+import Minimax
 
 -- Super simple AI player
 -- | Chooses first option from valid actions
@@ -89,3 +90,12 @@ my_hmm_player (State ub actB nextP) False = do
   my_hmm_player (State ub actB nextP) True
 my_hmm_player state True = do
   return (hmm_player ultimateTicTacToe state)
+
+-- ultimate tic tac toe minimax player
+my_mm_player :: Player
+my_mm_player state True = do
+    return (mm_player ultimateTicTacToe state)
+my_mm_player (State ub actB nextP) False = do
+    putStrLn ("Press enter for the AI to place "++(show nextP))
+    getLine
+    return (mm_player ultimateTicTacToe (State ub actB nextP))
