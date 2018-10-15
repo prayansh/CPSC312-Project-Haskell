@@ -2,6 +2,7 @@ module AIPlayer where
 
 import Data.Char
 import Data.Maybe
+import HeuristicPlayer
 import System.Random
 import Text.Read (readMaybe)
 import TypeDef
@@ -10,12 +11,11 @@ import UltimateTicTacToe
 -- Super simple AI player
 -- | Chooses first option from valid actions
 unintelligent_player :: Player
-unintelligent_player (State ub actB nextP) True = do
-  let action = head (get_valid_actions ub actB)
-  return action
 unintelligent_player (State ub actB nextP) False = do
   putStrLn ("Press enter for the AI to place " ++ (show nextP))
   getLine
+  unintelligent_player (State ub actB nextP) True
+unintelligent_player (State ub actB nextP) True = do
   let action = head (get_valid_actions ub actB)
   return action
 
@@ -48,13 +48,11 @@ placeAt_actions =
 all_actions = choose_actions ++ placeAt_actions
 
 simple_player :: Player
-simple_player (State ub actB nextP) True = do
-  let valid_actions = (get_valid_actions ub actB)
-  let action = get_next_best valid_actions all_actions
-  return action
 simple_player (State ub actB nextP) False = do
   putStrLn ("Press enter for the AI to place " ++ (show nextP))
   getLine
+  simple_player (State ub actB nextP) True
+simple_player (State ub actB nextP) True = do
   let valid_actions = (get_valid_actions ub actB)
   let action = get_next_best valid_actions all_actions
   return action
@@ -71,10 +69,7 @@ random_player :: Player
 random_player (State ub actB nextP) False = do
   putStrLn ("Press enter for the AI to place " ++ (show nextP))
   getLine
-  let valid_actions = (get_valid_actions ub actB)
-  index <- randomRIO (0, ((length valid_actions) - 1) :: Int)
-  let action = valid_actions !! index
-  return action
+  random_player (State ub actB nextP) True
 random_player (State ub actB nextP) _ = do
   let valid_actions = (get_valid_actions ub actB)
   index <- randomRIO (0, ((length valid_actions) - 1) :: Int)
@@ -85,3 +80,12 @@ random_player (State ub actB nextP) _ = do
 shuffle_player :: Player
 shuffle_player (State ub actB nextP) _ = do
   return Invalid
+
+-- player that uses the heuristic function
+my_hmm_player :: Player
+my_hmm_player (State ub actB nextP) False = do
+  putStrLn ("Press enter for the AI to place " ++ (show nextP))
+  getLine
+  my_hmm_player (State ub actB nextP) True
+my_hmm_player state True = do
+  return (hmm_player ultimateTicTacToe state)
