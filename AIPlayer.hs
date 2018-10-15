@@ -10,7 +10,7 @@ import UltimateTicTacToe
 import qualified GuiAI as Gui
 import Minimax
 
--- Super simple AI player
+-------------------------- Super simple AI player
 -- | Chooses first option from valid actions
 unintelligent_player :: Player
 unintelligent_player (State ub actB nextP) False = do
@@ -21,7 +21,7 @@ unintelligent_player (State ub actB nextP) True = do
   let action = head (get_valid_actions ub actB)
   return action
 
--- Simple Player
+--------------------------- Simple Player
 -- | Chooses first valid option from a list of actions
 choose_actions =
   [ ChooseBoard 0
@@ -66,7 +66,8 @@ get_next_best valid (x:xs)
   | otherwise = get_next_best valid xs
 get_next_best _ _ = Invalid
 
--- | Not implemented, Chooses a random action from valid_actions list
+----------------------------------- Random Player
+--  Chooses a random action from valid_actions list
 random_player :: Player
 random_player (State ub actB nextP) False = do
   putStrLn ("Press enter for the AI to place " ++ (show nextP))
@@ -77,6 +78,15 @@ random_player (State ub actB nextP) _ = do
   index <- randomRIO (0, ((length valid_actions) - 1) :: Int)
   let action = valid_actions !! index
   return action
+
+-- player that uses the heuristic function
+my_hmm_player :: Player
+my_hmm_player (State ub actB nextP) False = do
+  putStrLn ("Press enter for the AI to place " ++ (show nextP))
+  getLine
+  my_hmm_player (State ub actB nextP) True
+my_hmm_player state True = do
+  return (hmm_player ultimateTicTacToe state)
 
 -- ultimate tic tac toe minimax player
 my_mm_player :: Player
