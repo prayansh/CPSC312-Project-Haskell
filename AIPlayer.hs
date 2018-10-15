@@ -9,7 +9,7 @@ import TypeDef
 import UltimateTicTacToe
 import Minimax
 
--- Super simple AI player
+-------------------------- Super simple AI player
 -- | Chooses first option from valid actions
 unintelligent_player :: Player
 unintelligent_player (State ub actB nextP) False = do
@@ -20,7 +20,7 @@ unintelligent_player (State ub actB nextP) True = do
   let action = head (get_valid_actions ub actB)
   return action
 
--- Simple Player
+--------------------------- Simple Player
 -- | Chooses first valid option from a list of actions
 choose_actions =
   [ ChooseBoard 0
@@ -65,7 +65,8 @@ get_next_best valid (x:xs)
   | otherwise = get_next_best valid xs
 get_next_best _ _ = Invalid
 
--- | Not implemented, Chooses a random action from valid_actions list
+----------------------------------- Random Player
+--  Chooses a random action from valid_actions list
 random_player :: Player
 random_player (State ub actB nextP) False = do
   putStrLn ("Press enter for the AI to place " ++ (show nextP))
@@ -76,11 +77,6 @@ random_player (State ub actB nextP) _ = do
   index <- randomRIO (0, ((length valid_actions) - 1) :: Int)
   let action = valid_actions !! index
   return action
-
--- | Not implemented, Chooses the first action from a shuffled valid_actions list
-shuffle_player :: Player
-shuffle_player (State ub actB nextP) _ = do
-  return Invalid
 
 -- player that uses the heuristic function
 my_hmm_player :: Player
