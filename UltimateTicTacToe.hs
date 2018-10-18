@@ -9,18 +9,20 @@ import GameHelper
 -- | Ultimate Tic Tac Toe Game
 ultimateTicTacToe :: Game
 ultimateTicTacToe Invalid s = (ContinueGame s)
-ultimateTicTacToe (ChooseBoard b) (State ub actB nextP) = ContinueGame (State ub b nextP)
+ultimateTicTacToe (ChooseBoard b) (State ub actB nextP) =
+  ContinueGame (State ub b nextP)
 ultimateTicTacToe (PlaceAt row col) (State ub actB nextP)
-    | is_u_board_draw nextUBoard = EndOfGame Nothing (State nextUBoard (-1) nextP)
-    | winner == Nothing = ContinueGame (State nextUBoard nextActiveBoard (nextSymbol nextP))
-    | otherwise = EndOfGame winner (State nextUBoard (-1) nextP)
-    where
-        nextUBoard = put_u_board ub actB row col (Just nextP)
-        winner = get_winner_u_board nextUBoard
-        index = (3 * row) + col
-        nextActiveBoard = if (elem index (get_playable_boards nextUBoard))
-                            then index
-                            else (-1)
+  | winner == Nothing && is_u_board_draw nextUBoard = EndOfGame Nothing (State nextUBoard (-1) nextP)
+  | winner == Nothing = ContinueGame (State nextUBoard nextActiveBoard (nextSymbol nextP))
+  | otherwise = EndOfGame winner (State nextUBoard (-1) nextP)
+  where
+    nextUBoard = put_u_board ub actB row col (Just nextP)
+    winner = get_winner_u_board nextUBoard
+    index = (3 * row) + col
+    nextActiveBoard =
+      if (elem index (get_playable_boards nextUBoard))
+        then index
+        else (-1)
 
 ---- Game Logic Functions
 
