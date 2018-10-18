@@ -56,3 +56,37 @@ playFast game (ContinueGame (State ub actB playerSymbol)) [currentP, otherP] = d
           then [otherP, currentP]
           else [currentP, otherP]
   playFast game (game action (State ub actB playerSymbol)) playerList
+
+playSuperFast :: Game -> Result -> [Player] -> IO (Maybe Symbol)
+playSuperFast _ (EndOfGame winner (State ub actB _)) _ = do
+  putStrLn ("Winner " ++ (show winner))
+  return winner
+--   draw_ultimate_board ub (-1) (u_board_to_board ub)
+playSuperFast game (ContinueGame (State ub actB playerSymbol)) [currentP, otherP] = do
+  action <- currentP (State ub actB playerSymbol) True
+  let playerList =
+        if isPlaceAt action
+          then [otherP, currentP]
+          else [currentP, otherP]
+  playSuperFast game (game action (State ub actB playerSymbol)) playerList
+
+tournament 0 (p1, p2) (s1, s2, d) = do
+  putStrLn
+    ("Score: p1: " ++
+     (show s1) ++ ", p2: " ++ (show s2) ++ ", draws: " ++ (show d))
+tournament number (p1, p2) (s1, s2, d) = do
+  let emptyState = State emptyUBoardCell (-1) X
+  winner <- playSuperFast ultimateTicTacToe (ContinueGame emptyState) [p1, p2]
+  let newScore =
+        if (odd number)
+          then case winner of
+                 Nothing -> (s1, s2, d + 1)
+                 Just X -> (s1 + 1, s2, d)
+                 Just O -> (s1, s2 + 1, d)
+          else case winner of
+                 Nothing -> (s1, s2, d + 1)
+                 Just X -> (s1, s2+1, d)
+                 Just O -> (s1+1, s2, d)
+  tournament (number - 1) (p2, p1) newScore
+
+startTournament number (p1, p2) = tournament number (p1, p2) (0, 0, 0)

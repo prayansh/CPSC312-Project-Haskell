@@ -31,8 +31,8 @@ testStart5 = play ultimateTicTacToe (ContinueGame startState) [human_player, sim
     where startState = (State (ubc tUBoardAlmostDraw) 1 X)
 
 testMiniMax :: IO()
-testMiniMax = playFast ultimateTicTacToe (ContinueGame startState) [simple_player, my_mm_player]
-    where startState = (State (ubc tBoardOnlyOne) (-1) X)
+testMiniMax = playFast ultimateTicTacToe (ContinueGame startState) [simple_player, betterH_player]
+    where startState = (State (ubc tBoardMinimax) (-1) O)
 
 --testPlayDraw :: IO()
 --testPlayDraw = play ultimateTicTacToe (ContinueGame startState) [human_player, simple_player]
