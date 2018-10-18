@@ -27,3 +27,5 @@ All of these can found in `AIPlayer.hs`
 - Heuristic Player (uses a heuristic function) - `my_hmm_player`
 - Smarter Heuristic Player (uses a win sequencing heuristic function) - `smart_player`
 - Minimax Player (uses the minimax algorithm) - `my_mm_player`
+- Gui Player with options (uses depth limited minimax with a original heuristic that takes 2 parameters) - `(gui_player_with_options (heuristic_option1, heuristic_option2) depth)`
+- Gui Player (Gui Player with default options and depth 2) - `gui_player`
