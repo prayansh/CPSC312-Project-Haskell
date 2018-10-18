@@ -122,12 +122,3 @@ gui_player = create_player Gui.player
 
 gui_player_with_options :: (Double, Double) -> Int -> Player
 gui_player_with_options hp depth = create_player (Gui.player_with_options hp depth)
-
--- player that uses the heuristic function
-my_hmm_player :: Player
-my_hmm_player (State ub actB nextP) False = do
-  putStrLn ("Press enter for the AI to place " ++ (show nextP))
-  getLine
-  my_hmm_player (State ub actB nextP) True
-my_hmm_player state True = do
-  return (hmm_player ultimateTicTacToe state)
