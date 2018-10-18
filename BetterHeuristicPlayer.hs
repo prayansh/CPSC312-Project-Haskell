@@ -27,9 +27,9 @@ valueChooseAct game st ttl act = heuristicForChoose game (game act st) ttl
 
 heuristicForPlace :: Game -> Result -> Int -> Double
 heuristicForPlace game (ContinueGame (State ub actB symbol)) 0 =
-  heuristicU ub symbol
+  - heuristicU ub symbol
 heuristicForPlace game (ContinueGame st) ttl =
-  (snd (heuristic game st (ttl - 1)))
+  - (snd (heuristic game st (ttl - 1)))
   where
     (State ub _ symbol) = st
 heuristicForPlace game (EndOfGame winner (State ub actB symbol)) ttl =
