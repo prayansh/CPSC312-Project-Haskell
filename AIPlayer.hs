@@ -10,6 +10,7 @@ import TypeDef
 import UltimateTicTacToe
 import qualified GuiAI as Gui
 import Minimax
+import Ming_Minimax
 
 -------------------------- Super simple AI player
 -- | Chooses first option from valid actions
@@ -101,11 +102,11 @@ smart_player state True = do
 -- ultimate tic tac toe minimax player
 my_mm_player :: Player
 my_mm_player state True = do
-    return (mm_player ultimateTicTacToe state)
+    return (ming_mm_player ultimateTicTacToe state)
 my_mm_player (State ub actB nextP) False = do
     putStrLn ("Press enter for the AI to place "++(show nextP))
     getLine
-    return (mm_player ultimateTicTacToe (State ub actB nextP))
+    return (ming_mm_player ultimateTicTacToe (State ub actB nextP))
 
 
 -- Takes a non io, pure player and converts it into a io player
