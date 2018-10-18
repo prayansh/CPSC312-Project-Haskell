@@ -3,6 +3,7 @@ module AIPlayer where
 import Data.Char
 import Data.Maybe
 import HeuristicPlayer
+import BetterHeuristicPlayer
 import System.Random
 import Text.Read (readMaybe)
 import TypeDef
@@ -87,6 +88,15 @@ my_hmm_player (State ub actB nextP) False = do
   my_hmm_player (State ub actB nextP) True
 my_hmm_player state True = do
   return (hmm_player ultimateTicTacToe state)
+
+-- player that uses the Better heuristic function
+smart_player :: Player
+smart_player (State ub actB nextP) False = do
+  putStrLn ("Press enter for the AI to place " ++ (show nextP))
+  getLine
+  smart_player (State ub actB nextP) True
+smart_player state True = do
+  return (winSeqH_player ultimateTicTacToe state)
 
 -- ultimate tic tac toe minimax player
 my_mm_player :: Player
