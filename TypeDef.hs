@@ -1,7 +1,7 @@
 module TypeDef where
 
 data Symbol = X | O
-    deriving (Eq, Show, Read)
+    deriving (Eq, Ord, Read, Show)
 type Cell = Maybe Symbol -- Nothing for blank
 type Board = [[Cell]]
 type UltimateBoard = [[Board]]
@@ -32,13 +32,16 @@ instance Show Action where
 
 -- | State represents the current board, and current active board, current(next) player
 data State = State UltimateBoard Int Symbol
-        deriving (Eq, Show)
+        deriving (Eq, Ord, Show)
 
 -- | Game function given an Action, and a State, returns a Result
 type Game = Action -> State -> Result
 
 -- | Player function given a State, and a fast-mode boolean, returns an Action
 type Player = State -> Bool -> IO Action
+
+type Heuristic = State -> Double 
+
 
 
 ------------------------------------------------------------------------------------------

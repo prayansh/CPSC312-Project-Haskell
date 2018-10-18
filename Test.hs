@@ -52,6 +52,10 @@ testStart5 =
   where
     startState = (State (ubc tUBoardAlmostDraw) 1 X)
 
+testStartGuiPLayer :: IO ()
+testStartGuiPLayer = playFast ultimateTicTacToe (ContinueGame startState) [unintelligent_player, (gui_player_with_options (9,9) 2)]
+     where startState = (State (ubc tUBoardAlmostO) (-1) X)
+
 --testPlayDraw :: IO()
 --testPlayDraw = play ultimateTicTacToe (ContinueGame startState) [human_player, ai_player]
 --    where startState = (State (ubc tUBoardDraw) 2 O)
