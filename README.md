@@ -11,6 +11,7 @@ pull request, this is so as to prevent master branch from breaking
 
 ## How to Run
 `ghc` is required to run this project
+- Load main module via `:l GameIO`
 - To start a default game between a Human and AI player(dumb) use `startDefault`
 - You can start the game with your choice of players with the following command
 ```start [players] <fastMode?>``` where `players` is a list of 
